@@ -16,55 +16,6 @@ export type ScrapeReturn = {
 
 @Injectable()
 export class AppService {
-  private levenshtein(a, b) {
-    const tmp = [];
-    let i;
-    let j;
-    const alen = a.length;
-    const blen = b.length;
-    let ch;
-
-    for (i = 0; i <= alen; i++) {
-      tmp[i] = [i];
-    }
-
-    for (j = 0; j <= blen; j++) {
-      tmp[0][j] = j;
-    }
-
-    for (i = 1; i <= alen; i++) {
-      ch = a.charAt(i - 1);
-      for (j = 1; j <= blen; j++) {
-        tmp[i][j] = Math.min(
-          tmp[i - 1][j] + 1,
-          tmp[i][j - 1] + 1,
-          tmp[i - 1][j - 1] + (ch !== b.charAt(j - 1) ? 1 : 0)
-        );
-      }
-    }
-    return tmp[alen][blen];
-  }
-
-  private filterSimilarStrings(strings, threshold = 0.2) {
-    const uniqueStrings = [];
-    for (const str of strings) {
-      let isUnique = true;
-      for (const uniqueStr of uniqueStrings) {
-        const distance = this.levenshtein(str, uniqueStr);
-        const similarity =
-          1 - distance / Math.max(str.length, uniqueStr.length);
-        if (similarity >= 1 - threshold) {
-          isUnique = false;
-          break;
-        }
-      }
-      if (isUnique) {
-        uniqueStrings.push(str);
-      }
-    }
-    return uniqueStrings;
-  }
-
   async scrapeWebPage(url: string): Promise<ScrapeReturn> {
     const browser = await puppeteer.launch({
       headless: true,
@@ -79,6 +30,56 @@ export class AppService {
       const cards = await page.$$eval(
         '[data-test-id="horizontal-item-card"]',
         (cardElements) => {
+          // Inside the callback, you can't access this, so we define the filterSimilarStrings function here
+          const levenshtein = (a, b) => {
+            const tmp = [];
+            let i;
+            let j;
+            const alen = a.length;
+            const blen = b.length;
+            let ch;
+
+            for (i = 0; i <= alen; i++) {
+              tmp[i] = [i];
+            }
+
+            for (j = 0; j <= blen; j++) {
+              tmp[0][j] = j;
+            }
+
+            for (i = 1; i <= alen; i++) {
+              ch = a.charAt(i - 1);
+              for (j = 1; j <= blen; j++) {
+                tmp[i][j] = Math.min(
+                  tmp[i - 1][j] + 1,
+                  tmp[i][j - 1] + 1,
+                  tmp[i - 1][j - 1] + (ch !== b.charAt(j - 1) ? 1 : 0)
+                );
+              }
+            }
+            return tmp[alen][blen];
+          };
+
+          const filterSimilarStrings = (strings, threshold = 0.2) => {
+            const uniqueStrings = [];
+            for (const str of strings) {
+              let isUnique = true;
+              for (const uniqueStr of uniqueStrings) {
+                const distance = levenshtein(str, uniqueStr);
+                const similarity =
+                  1 - distance / Math.max(str.length, uniqueStr.length);
+                if (similarity >= 1 - threshold) {
+                  isUnique = false;
+                  break;
+                }
+              }
+              if (isUnique) {
+                uniqueStrings.push(str);
+              }
+            }
+            return uniqueStrings;
+          };
+
           return cardElements.map((card) => {
             const name = card.querySelector(
               '[data-test-id="horizontal-item-card-header"]'
@@ -91,15 +92,17 @@ export class AppService {
               amount: '',
             };
             if (
-              card.querySelector('[data-test-id="horizontal-item-card-price"]')
+              card.querySelector(
+                '[data-test-id="horizontal-item-card-discounted-price"]'
+              )
             ) {
-              price.amount = card.querySelector(
-                '[data-test-id="horizontal-item-card-price"]'
-              )?.innerHTML;
-            } else {
               price.isDiscounted = true;
               price.amount = card.querySelector(
                 '[data-test-id="horizontal-item-card-discounted-price"]'
+              )?.innerHTML;
+            } else {
+              price.amount = card.querySelector(
+                '[data-test-id="horizontal-item-card-price"]'
               )?.innerHTML;
             }
 
@@ -115,7 +118,7 @@ export class AppService {
               .filter((item) => item !== '')
               .map((item) => item.trim());
 
-            const filteredIngredients = this.filterSimilarStrings(ingredients);
+            const filteredIngredients = filterSimilarStrings(ingredients);
 
             return {
               name,

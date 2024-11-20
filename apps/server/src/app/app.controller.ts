@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 import { AppService, ScrapeReturn } from './app.service';
 
 @Controller()

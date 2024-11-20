@@ -41,6 +41,9 @@ importers:
       rxjs:
         specifier: ^7.8.0
         version: 7.8.1
+      swr:
+        specifier: ^2.2.5
+        version: 2.2.5(react@18.3.1)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.1.1
@@ -6136,6 +6139,11 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
+  swr@2.2.5:
+    resolution: {integrity: sha512-QtxqyclFeAsxEUeZIYmsaQ0UjimSq1RZ9Un7I68/0ClKK/U3LoyQunwkQfJZr2fc22DfIXLNDc2wFyTEikCUpg==, tarball: https://registry.npmjs.org/swr/-/swr-2.2.5.tgz}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0
+
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==, tarball: https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz}
 
@@ -6462,6 +6470,11 @@ packages:
 
   urlpattern-polyfill@10.0.0:
     resolution: {integrity: sha512-H/A06tKD7sS1O1X2SshBVeA5FLycRpjqiBeqGKmBwBDBy28EnRjORxTNe269KSSr5un5qyWi1iL61wLxpd+ZOg==, tarball: https://registry.npmjs.org/urlpattern-polyfill/-/urlpattern-polyfill-10.0.0.tgz}
+
+  use-sync-external-store@1.2.2:
+    resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==, tarball: https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.2.2.tgz}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==, tarball: https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz}
@@ -14134,6 +14147,12 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.1.1
 
+  swr@2.2.5(react@18.3.1):
+    dependencies:
+      client-only: 0.0.1
+      react: 18.3.1
+      use-sync-external-store: 1.2.2(react@18.3.1)
+
   symbol-tree@3.2.4: {}
 
   tailwindcss@3.4.3(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.15))(@types/node@18.16.9)(typescript@5.5.4)):
@@ -14493,6 +14512,10 @@ snapshots:
       requires-port: 1.0.0
 
   urlpattern-polyfill@10.0.0: {}
+
+  use-sync-external-store@1.2.2(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   util-deprecate@1.0.2: {}
 
