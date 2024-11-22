@@ -1,14 +1,14 @@
-import { createServer } from 'http';
 import bootstrap from '../src/main';
 
-let cachedApp;
+let cachedHandler;
 
 export default async function handler(req, res) {
-  if (!cachedApp) {
-    cachedApp = await bootstrap(); // Initialize the NestJS app
+  if (!cachedHandler) {
+    const app = await bootstrap();
+    cachedHandler = app.getHttpAdapter().getInstance();
   }
 
-  cachedApp(req, res); // Pass the request to the serverless handler
+  return cachedHandler(req, res);
 }
 
 export const config = {
