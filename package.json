@@ -3,8 +3,21 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "dev": "nx run-many --target=dev --projects=client,server --parallel",
     "client:dev": "nx run client:dev",
-    "server:dev": "nx run server:serve --configuration=development"
+    "server:dev": "nx run server:serve --configuration=development",
+    
+    "build": "nx run-many --target=build --projects=client,server",
+    "build:client": "nx build client",
+    "build:server": "nx build server",
+    
+    "vercel-build": "nx run-many --target=build --projects=client,server",
+    "deploy": "vercel",
+    "deploy:prod": "vercel --prod",
+    
+    "clean": "nx reset",
+    "lint": "nx run-many --target=lint --projects=client,server",
+    "test": "nx run-many --target=test --projects=client,server"
   },
   "private": true,
   "dependencies": {
@@ -12,6 +25,8 @@
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
     "@nx/nest": "^20.1.2",
+    "@vendia/serverless-express": "^4.12.6",
+    "aws-lambda": "^1.0.7",
     "axios": "^1.6.0",
     "next": "14.2.16",
     "puppeteer": "^23.8.0",

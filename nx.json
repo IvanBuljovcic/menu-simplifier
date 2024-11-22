@@ -78,5 +78,15 @@
         "linter": "eslint"
       }
     }
+  },
+  "targets": {
+    "build": {
+      "executor": "@nrwl/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/client"
+      }
+    }
   }
 }

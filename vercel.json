@@ -1,0 +1,4 @@
+{
+  "buildCommand": "nx run-many --target=build --projects=client,server",
+  "outputDirectory": "dist/apps/client"
+}
