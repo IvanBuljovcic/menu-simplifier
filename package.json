@@ -6,8 +6,8 @@
     "dev": "nx run-many --target=dev --projects=client,server --parallel",
     "client:dev": "nx run client:dev",
     "server:dev": "nx run server:serve --configuration=development",
-    "build": "nx build client",
-    "vercel-build": "nx build client",
+    "build": "nx build client --configuration=production",
+    "vercel-build": "nx build client --configuration=production",
     "deploy": "vercel",
     "deploy:prod": "vercel --prod"
   },
