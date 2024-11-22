@@ -6,18 +6,10 @@
     "dev": "nx run-many --target=dev --projects=client,server --parallel",
     "client:dev": "nx run client:dev",
     "server:dev": "nx run server:serve --configuration=development",
-    
     "build": "nx build client",
-    "build:client": "nx build client",
-    "build:server": "nx build server",
-    
     "vercel-build": "nx build client",
     "deploy": "vercel",
-    "deploy:prod": "vercel --prod",
-    
-    "clean": "nx reset",
-    "lint": "nx run-many --target=lint --projects=client,server",
-    "test": "nx run-many --target=test --projects=client,server"
+    "deploy:prod": "vercel --prod"
   },
   "private": true,
   "dependencies": {

@@ -1,4 +1,4 @@
 {
   "buildCommand": "nx build client",
-  "outputDirectory": "dist/apps/client/.next"
+  "outputDirectory": ".next"
 }
