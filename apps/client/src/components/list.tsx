@@ -3,6 +3,8 @@
 import { useGetUniqueIngredients } from '../hooks';
 import React, { useEffect, useMemo, useState } from 'react';
 import Ingredient from './ingredient';
+import { MenuItem } from './menu-item';
+import { API_URL } from '../utils';
 
 export type Item = {
   name: string;
@@ -19,13 +21,22 @@ const List = () => {
   const [data, setData] = useState<Item[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = async () => {
     if (!query) {
       return null;
     }
 
-    const res = await fetch(`http://localhost:3000/api/scrape?url=${query}`);
+    setSelected([]);
+    setIsLoading(true);
+
+    const res = await fetch(`${API_URL}/scrape?url=${query}`).then(
+      (data) => {
+        setIsLoading(false);
+        return data;
+      }
+    );
     const data = await res.json();
 
     setData(data.cards);
@@ -83,30 +94,6 @@ const List = () => {
     );
   };
 
-  const renderMenuItem = (item: Item) => (
-    <div key={item.id} className="bg-white shadow-md p-4 rounded-lg w-52">
-      {item.image && <img srcSet={item.image} alt={item.name} />}
-
-      <h3 className="mb-2 font-semibold text-lg">{item.name}</h3>
-      <p className={`mb-2 text-gray-600 ${item.price.isDiscounted ? 'text-red' : ''}`}>Price: {item.price.amount.replace(/&nbsp;/g, ' ')}</p>
-      <div className="flex flex-wrap gap-1">
-        {item.ingredients.map((ing) => (
-          <button
-            key={ing}
-            className={`text-xs px-2 py-1 rounded ${
-              selected.includes(ing)
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-            onClick={() => handleItemClick(ing)}
-          >
-            {ing}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-
   const renderItems = () => (
     <div className="flex flex-col justify-center items-center w-full">
       <h1 className="mb-5 text-5xl">Items total: {data.length}</h1>
@@ -135,11 +122,14 @@ const List = () => {
       <div className="flex gap-2">
         <input
           className="flex-1 border"
-          type="text"
+          type="search"
           onChange={(e) => handleUrlChange(e.target.value)}
           defaultValue={query}
         />
-        <button className="bg-blue-500 py-2 rounded min-w-40 text-white" onClick={() => handleSearch()}>
+        <button
+          className="bg-blue-500 py-2 rounded min-w-40 text-white"
+          onClick={() => handleSearch()}
+        >
           Search
         </button>
       </div>
@@ -149,7 +139,14 @@ const List = () => {
       {data && renderItems()}
 
       <div className="flex flex-wrap gap-4">
-        {filteredMenuItems.map(renderMenuItem)}
+        {filteredMenuItems?.map((item) => (
+          <MenuItem
+            item={item}
+            handleItemClick={handleItemClick}
+            selected={selected}
+            key={item.id}
+          />
+        ))}
       </div>
     </div>
   );

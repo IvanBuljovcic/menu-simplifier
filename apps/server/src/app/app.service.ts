@@ -53,7 +53,7 @@ export class AppService {
                 tmp[i][j] = Math.min(
                   tmp[i - 1][j] + 1,
                   tmp[i][j - 1] + 1,
-                  tmp[i - 1][j - 1] + (ch !== b.charAt(j - 1) ? 1 : 0)
+                  tmp[i - 1][j - 1] + (ch !== b.charAt(j - 1) ? 1 : 0),
                 );
               }
             }
@@ -82,7 +82,7 @@ export class AppService {
 
           return cardElements.map((card) => {
             const name = card.querySelector(
-              '[data-test-id="horizontal-item-card-header"]'
+              '[data-test-id="horizontal-item-card-header"]',
             ).innerHTML;
 
             const id = card.firstElementChild.getAttribute('id');
@@ -91,25 +91,24 @@ export class AppService {
               isDiscounted: false,
               amount: '',
             };
-            if (
-              card.querySelector(
-                '[data-test-id="horizontal-item-card-discounted-price"]'
-              )
-            ) {
+
+            const discountPrice = card.querySelector(
+              '[data-test-id="horizontal-item-card-discounted-price"]',
+            )?.innerHTML;
+
+            if (discountPrice) {
               price.isDiscounted = true;
-              price.amount = card.querySelector(
-                '[data-test-id="horizontal-item-card-discounted-price"]'
-              )?.innerHTML;
+              price.amount = discountPrice;
             } else {
               price.amount = card.querySelector(
-                '[data-test-id="horizontal-item-card-price"]'
+                '[data-test-id="horizontal-item-card-price"]',
               )?.innerHTML;
             }
 
             const imageUrl = card.querySelector('img').getAttribute('srcset');
 
             const ingredientsElement = card.querySelector(
-              '[data-test-id="horizontal-item-card-header"] + p'
+              '[data-test-id="horizontal-item-card-header"] + p',
             ).innerHTML;
             const ingredients = ingredientsElement
               .trim()
@@ -128,7 +127,7 @@ export class AppService {
               ingredients: filteredIngredients,
             };
           });
-        }
+        },
       );
 
       return { cards };

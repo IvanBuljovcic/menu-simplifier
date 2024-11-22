@@ -1,11 +1,9 @@
-import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { AppService, ScrapeReturn } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get('scrape')
   async scrape(@Query('url') url: string): Promise<ScrapeReturn> {
