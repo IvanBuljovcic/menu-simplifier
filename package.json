@@ -7,11 +7,11 @@
     "client:dev": "nx run client:dev",
     "server:dev": "nx run server:serve --configuration=development",
     
-    "build": "nx run-many --target=build --projects=client,server",
+    "build": "nx build client",
     "build:client": "nx build client",
     "build:server": "nx build server",
     
-    "vercel-build": "nx run-many --target=build --projects=client,server",
+    "vercel-build": "nx build client",
     "deploy": "vercel",
     "deploy:prod": "vercel --prod",
     
