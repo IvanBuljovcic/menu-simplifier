@@ -14,7 +14,7 @@ async function bootstrap(): Promise<Handler> {
   app.setGlobalPrefix(globalPrefix);
   app.enableCors({
     origin: process.env.NODE_ENV === 'production' 
-      ? ['https://your-app.vercel.app'] // Update with your client domain
+      ? ['https://menu-simplifier.vercel.app/', process.env.NEXT_PUBLIC_API_URL] // Update with your client domain
       : ['http://localhost:3001'],
     credentials: true
   });
